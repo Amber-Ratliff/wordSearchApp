@@ -1,0 +1,18 @@
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-grid {
+    display: grid;
+    border: 1px solid black;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    padding: 1em;
+}
+
+.letters {
+    margin: 4px;
+    text-align: center;
+}

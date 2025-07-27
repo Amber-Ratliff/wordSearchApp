@@ -4,11 +4,26 @@ function generateRandomLetter() {
     return String.fromCharCode((randomNumber + asciiCode));
 }
 
+function wordTest() {
+    let word = 'three';
+    return word.toUpperCase();
+}
+
+function displayGrid(grid, row, col, rows, cols) {
+    const letterGrid = document.getElementById('search-grid');
+    const letterSpace = document.createElement('div');
+    letterSpace.classList.add('letters');
+    letterSpace.textContent = grid[row][col]
+    letterGrid.appendChild(letterSpace);
+}
+
 function createGrid(rows, cols) {
     //creates a 2d array and sets each element to an empty string
     const grid = new Array(rows).fill('').map(() => new Array(cols).fill(''));
-    let word = 'three';
-    word = word.toUpperCase();
+
+    //will be a list with logic to populate.
+    let word = wordTest(); //testing
+
     const directionList = ['up', 'down', 'left', 'right', 'upDiagonal', 'downDiagonal'];
 
     let placed = false;
@@ -17,8 +32,8 @@ function createGrid(rows, cols) {
         const rowStart = Math.floor(Math.random() * rows);
         const colStart = Math.floor(Math.random() * cols);
         const direction = directionList[Math.floor(Math.random() * directionList.length)];
-
-        let deltaRow, deltaCol;
+        let deltaRow;
+        let deltaCol;
 
         if (direction === 'up') {
             deltaRow = -1; deltaCol = 0;
@@ -48,6 +63,9 @@ function createGrid(rows, cols) {
             if (grid[row][col] === '') {
                 grid[row][col] = generateRandomLetter();
             }
+
+            displayGrid(grid, row, col);
+            
     }
 }
 
