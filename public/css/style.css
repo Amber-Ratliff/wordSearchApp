@@ -5,14 +5,16 @@ body {
 }
 
 .search-grid {
+    user-select: none;
     display: grid;
     border: 1px solid black;
-    grid-template-columns: repeat(10, 1fr);
-    grid-template-rows: repeat(10, 1fr);
+    /* grid-template-columns: repeat(11, 1fr);
+    grid-template-rows: repeat(10, 1fr); */
     padding: 1em;
+    gap: 0;
 }
 
 .letters {
-    margin: 4px;
+    padding: 4px;
     text-align: center;
 }

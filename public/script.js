@@ -1,3 +1,9 @@
+const letterGrid = document.getElementById('search-grid');
+
+const word = 'three';
+
+let mousedown = false;
+
 function generateRandomLetter() {
     const asciiCode = 65
     const randomNumber = Math.floor(Math.random() * 26);
@@ -10,11 +16,13 @@ function wordTest() {
 }
 
 function displayGrid(grid, row, col, rows, cols) {
-    const letterGrid = document.getElementById('search-grid');
     const letterSpace = document.createElement('div');
     letterSpace.classList.add('letters');
     letterSpace.textContent = grid[row][col]
     letterGrid.appendChild(letterSpace);
+    console.log([rows, cols])
+    letterGrid.style.gridTemplateRows = `repeat(${rows}, 1fr)`
+    letterGrid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`
 }
 
 function createGrid(rows, cols) {
@@ -64,7 +72,7 @@ function createGrid(rows, cols) {
                 grid[row][col] = generateRandomLetter();
             }
 
-            displayGrid(grid, row, col);
+            displayGrid(grid, row, col, rows, cols);
             
     }
 }
@@ -91,4 +99,40 @@ function wordFits(colStart, rowStart, deltaRow, deltaCol, word, grid) {
 }
 
 
-console.log(createGrid(10, 10));
+console.log(createGrid(10, 11));
+
+letterGrid.addEventListener('mouseover', (e) => {
+    //const pointerX = e.clientX;
+    //const pointerY = e.clientY;
+
+    //setInterval(() => {
+        //const target = document.elementFromPoint(pointerX, pointerY);
+
+        if (mousedown && e.target.classList.contains('letters')) {
+            e.target.style.backgroundColor = 'skyblue'
+        }
+    });//, 500)
+
+
+letterGrid.addEventListener('mousedown', (e) => {
+    if (e.target.classList.contains('letters')) {
+        mousedown = true;
+        e.target.style.backgroundColor = 'skyblue';
+    }
+});
+
+
+
+letterGrid.addEventListener('mouseover', (e) => {
+  if (e.target.classList.contains('letters') && mousedown) {
+    e.target.style.backgroundColor = 'skyblue';
+  }});
+ 
+
+document.addEventListener('mouseup', () => {
+    mousedown = false;
+});
+
+
+
+
