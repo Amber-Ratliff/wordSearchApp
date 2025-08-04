@@ -91,7 +91,7 @@ function createGrid(rows, cols) {
 }
 
     return grid;
-}
+};
 
 
 function wordFits(colStart, rowStart, deltaRow, deltaCol, words, grid) {
@@ -108,8 +108,8 @@ function wordFits(colStart, rowStart, deltaRow, deltaCol, words, grid) {
             return false;
         }
     }
-    //return true;
-}
+    return true;
+};
 
 
 console.log(createGrid(10, 11));
