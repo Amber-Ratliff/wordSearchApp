@@ -4,7 +4,7 @@ import db from './database.js';
 const app = express();
 
 //did this just for practice
-const PORT = process.env.port || 5000;
+const PORT = process.env.PORT || 5000;
 
 //recreates __filename and __dirname
 import path from 'path';
@@ -12,8 +12,11 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+//create corredt path
+const __parentDirname = path.dirname(__dirname)
+
 //express.static() takes a file path
-app.use(express.static(path.join(__dirname, 'public' )))
+app.use(express.static(path.join(__parentDirname, 'public' )))
 
 //gets all words filtered by grid size
 app.get('/api/words', (request, response) => {

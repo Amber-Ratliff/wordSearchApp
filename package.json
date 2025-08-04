@@ -2,7 +2,7 @@
   "name": "wordsearchapp",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "backend/server.js",
   "type": "module",
   "scripts": {
     "devstart": "nodemon server.js"
@@ -19,7 +19,6 @@
   },
   "homepage": "https://github.com/Amber-Ratliff/wordSearchApp#readme",
   "dependencies": {
-    "cors": "^2.8.5",
     "express": "^5.1.0",
     "sqlite3": "^5.1.7"
   },
