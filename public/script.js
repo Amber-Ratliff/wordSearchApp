@@ -1,19 +1,21 @@
 const letterGrid = document.getElementById('search-grid');
 
-const word = 'three';
+const words = ['pizza', 'hotdog', 'soda', 'drink', 'broke', 'debug', 'fuck', 'test']
 
-let mousedown = false;
+//const word = 'three';
+
+//let mousedown = false;
 
 function generateRandomLetter() {
     const asciiCode = 65
     const randomNumber = Math.floor(Math.random() * 26);
     return String.fromCharCode((randomNumber + asciiCode));
-}
+};
 
 function wordTest() {
-    let word = 'three';
-    return word.toUpperCase();
-}
+    //let word = 'three';
+    //return word.toUpperCase();
+};
 
 function displayGrid(grid, row, col, rows, cols) {
     const letterSpace = document.createElement('div');
@@ -23,17 +25,16 @@ function displayGrid(grid, row, col, rows, cols) {
     console.log([rows, cols])
     letterGrid.style.gridTemplateRows = `repeat(${rows}, 1fr)`
     letterGrid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`
-}
 
-function createGrid(rows, cols) {
-    //creates a 2d array and sets each element to an empty string
-    const grid = new Array(rows).fill('').map(() => new Array(cols).fill(''));
 
-    //will be a list with logic to populate.
-    let word = wordTest(); //testing
+};
+
+function placeWord(rows, cols, word, grid) {
+
+    word = word.toUpperCase();
 
     const directionList = ['up', 'down', 'left', 'right', 'upDiagonal', 'downDiagonal'];
-
+    
     let placed = false;
 
     while (!placed) {
@@ -58,6 +59,7 @@ function createGrid(rows, cols) {
         }
 
         if (wordFits(colStart, rowStart, deltaRow, deltaCol, word, grid)) {
+
             for (let i = 0; i < word.length; i++) {
                 const row = rowStart + i * deltaRow;
                 const col = colStart + i * deltaCol;
@@ -66,14 +68,25 @@ function createGrid(rows, cols) {
             placed = true;
         }
     }
+    return grid;
+};
+
+function createGrid(rows, cols) {
+    //creates a 2d array and sets each element to an empty string
+    const grid = new Array(rows).fill('').map(() => new Array(cols).fill(''));
+
+    words.forEach((word) => {
+        if (word.length <= cols - 1) {
+            placeWord(rows, cols, word, grid);
+        }});
+    
     for (let row = 0; row < grid.length; row++) {
         for (let col = 0; col < grid[row].length; col++) {
             if (grid[row][col] === '') {
                 grid[row][col] = generateRandomLetter();
             }
 
-            displayGrid(grid, row, col, rows, cols);
-            
+            displayGrid(grid, row, col, rows, cols);       
     }
 }
 
@@ -81,8 +94,8 @@ function createGrid(rows, cols) {
 }
 
 
-function wordFits(colStart, rowStart, deltaRow, deltaCol, word, grid) {
-    for (let i = 0; i < word.length; i++) {
+function wordFits(colStart, rowStart, deltaRow, deltaCol, words, grid) {
+    for (let i = 0; i < words.length; i++) {
         let row = rowStart + i * deltaRow;
         let col = colStart + i * deltaCol;
         if (row < 0 || col < 0) {
@@ -91,47 +104,38 @@ function wordFits(colStart, rowStart, deltaRow, deltaCol, word, grid) {
         if (row >= grid.length || col >= grid[0].length) {
             return false
         }
-        if (grid[row][col] !== '' && grid[row][col] !== word[i]) {
+        if (grid[row][col] !== '' && grid[row][col] !== words[i]) {
             return false;
         }
     }
-    return true;
+    //return true;
 }
 
 
 console.log(createGrid(10, 11));
 
-letterGrid.addEventListener('mouseover', (e) => {
+//letterGrid.addEventListener('mouseover', (e) => {
     //const pointerX = e.clientX;
     //const pointerY = e.clientY;
 
     //setInterval(() => {
         //const target = document.elementFromPoint(pointerX, pointerY);
 
-        if (mousedown && e.target.classList.contains('letters')) {
-            e.target.style.backgroundColor = 'skyblue'
-        }
-    });//, 500)
+        // if (mousedown && e.target.classList.contains('letters')) {
+        //     e.target.style.backgroundColor = 'skyblue'
+        // }
+    //});//, 500)
 
 
-letterGrid.addEventListener('mousedown', (e) => {
-    if (e.target.classList.contains('letters')) {
-        mousedown = true;
-        e.target.style.backgroundColor = 'skyblue';
-    }
-});
-
-
-
-letterGrid.addEventListener('mouseover', (e) => {
-  if (e.target.classList.contains('letters') && mousedown) {
-    e.target.style.backgroundColor = 'skyblue';
-  }});
+// letterGrid.addEventListener('mouseover', (e) => {
+//   if (e.target.classList.contains('letters') && mousedown) {
+//     e.target.style.backgroundColor = 'skyblue';
+//   }});
  
 
-document.addEventListener('mouseup', () => {
-    mousedown = false;
-});
+// document.addEventListener('mouseup', () => {
+//     mousedown = false;l
+// });
 
 
 
