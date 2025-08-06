@@ -4,12 +4,15 @@ body {
     justify-content: center;
 }
 
+.word-box {
+    margin-left: 20px;
+
+}
+
 .search-grid {
     user-select: none;
     display: grid;
     border: 1px solid black;
-    /* grid-template-columns: repeat(11, 1fr);
-    grid-template-rows: repeat(10, 1fr); */
     padding: 1em;
     gap: 0;
 }
@@ -17,4 +20,17 @@ body {
 .letters {
     padding: 4px;
     text-align: center;
+    font-weight: bold;
+}
+
+.letters.selected {
+    background-color: lightblue;
+}
+
+.letters.found {
+    background-color: gold;
+}
+
+.found-word {
+    text-decoration: line-through;
 }

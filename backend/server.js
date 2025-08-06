@@ -4,7 +4,7 @@ import db from './database.js';
 const app = express();
 
 //did this just for practice
-const PORT = process.env.PORT || 5000;
+const PORT = 3000;
 
 //recreates __filename and __dirname
 import path from 'path';
@@ -44,3 +44,5 @@ app.get('/api/words', (request, response) => {
 app.listen(PORT, () => {
     console.log(`listening on port: ${PORT}`)
 });
+
+export default PORT;
