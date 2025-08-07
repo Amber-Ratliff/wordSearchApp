@@ -62,6 +62,7 @@ function placeWord(rows, cols, word, grid) {
 
     if (placed) {
         const wordList = document.createElement('p');
+        wordList.classList.add('words')
         wordBox.appendChild(wordList)
         wordList.textContent = word;
 
@@ -116,19 +117,19 @@ function placeWord(rows, cols, word, grid) {
     return grid;
 })(10, 11);
 
-letterGrid.addEventListener('mousedown', (e) => {
-    if (!e.target.classList.contains('letters')) return;
+letterGrid.addEventListener('mousedown', (event) => {
+    if (!event.target.classList.contains('letters')) return;
     mousedown = true;
-    selectedLetters = [e.target];
-    startRow = parseInt(e.target.dataset.row);
-    startCol = parseInt(e.target.dataset.col);
-    e.target.classList.add('selected');
+    selectedLetters = [event.target];
+    startRow = parseInt(event.target.dataset.row);
+    startCol = parseInt(event.target.dataset.col);
+    event.target.classList.add('selected');
 });
 
-letterGrid.addEventListener('mouseover', (e) => {
-    if (!mousedown || !e.target.classList.contains('letters')) return;
+letterGrid.addEventListener('mouseover', (event) => {
+    if (!mousedown || !event.target.classList.contains('letters')) return;
 
-    const cell = e.target;
+    const cell = event.target;
     const row = parseInt(cell.dataset.row);
     const col = parseInt(cell.dataset.col);
 
@@ -161,7 +162,7 @@ letterGrid.addEventListener('mouseover', (e) => {
     }
 });
 
-letterGrid.addEventListener('mouseup', (e) => {
+letterGrid.addEventListener('mouseup', () => {
     mousedown = false;
 
     const foundWords = document.querySelectorAll('p')
@@ -174,6 +175,10 @@ letterGrid.addEventListener('mouseup', (e) => {
             cell.classList.add('found');
         });
 
+    } else if (!placedWords.includes(joinWord) || !placedWords.includes(reversed)) {
+        selectedLetters.forEach(cell => {
+            cell.classList.remove('selected');
+        });
     }
 
     foundWords.forEach(p => {

@@ -2,17 +2,27 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
 }
 
 .word-box {
-    margin-left: 20px;
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    border: 2px solid black;
 
+}
+
+.words {
+    flex: 1 1 25%;
+    padding: 0.25rem;
+    gap: 0.15rem;
 }
 
 .search-grid {
     user-select: none;
     display: grid;
-    border: 1px solid black;
+    border: 2px solid black;
     padding: 1em;
     gap: 0;
 }
@@ -33,4 +43,14 @@ body {
 
 .found-word {
     text-decoration: line-through;
+}
+
+@media screen and (max-width: 400px)  {
+    .words {
+        flex: 0 0 100%;
+    }
+
+    .words {
+        text-align: center;
+    }
 }
