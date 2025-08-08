@@ -2,6 +2,9 @@ import { generateRandomLetter, displayGrid, wordFits } from "./logic.js";
 
 const wordBox = document.getElementById('word-box');
 const letterGrid = document.getElementById('search-grid');
+const resetButton = document.getElementById('reset');
+//const newPuzzle = document.getElementById('new');
+const scoreCounter = 0;
 
 let mousedown = false;
 let selectedLetters = [];
@@ -75,7 +78,7 @@ function placeWord(rows, cols, word, grid) {
     return grid;
 }
 
-(async function createGrid(rows, cols) {
+async function createGrid(rows, cols) {
     const defaultWords = ['stupid', 'thing', 'broken', 'should', 'debug', 'test'];
     const grid = new Array(rows).fill('').map(() => new Array(cols).fill(''));
     const count = cols ** 2;
@@ -83,7 +86,7 @@ function placeWord(rows, cols, word, grid) {
     letterGrid.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
     letterGrid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
 
-    let words;
+    let words = [];
 
     try {
         const response = await fetch(`http://localhost:3000/api/words?count=${count}`);
@@ -115,7 +118,7 @@ function placeWord(rows, cols, word, grid) {
     }
 
     return grid;
-})(10, 11);
+};
 
 letterGrid.addEventListener('mousedown', (event) => {
     if (!event.target.classList.contains('letters')) return;
@@ -174,7 +177,8 @@ letterGrid.addEventListener('mouseup', () => {
         selectedLetters.forEach(cell => {
             cell.classList.add('found');
         });
-
+        scoreCounter += 1;
+    
     } else if (!placedWords.includes(joinWord) || !placedWords.includes(reversed)) {
         selectedLetters.forEach(cell => {
             cell.classList.remove('selected');
@@ -189,5 +193,12 @@ letterGrid.addEventListener('mouseup', () => {
         });
     })
 
+resetButton.addEventListener('click', () => {
+    const letters = document.querySelectorAll('.letters').forEach(letter => {
+        letter.classList.remove('selected', 'found');
 
+    });
+    selectedLetters = [];
+});
 
+createGrid(10,11);

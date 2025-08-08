@@ -1,9 +1,8 @@
 import express from 'express';
-import 'dotenv/config';
+//import 'dotenv/config';
 import db from './database.js';
 const app = express();
 
-//did this just for practice
 const PORT = 3000;
 
 //recreates __filename and __dirname
@@ -18,7 +17,7 @@ const __parentDirname = path.dirname(__dirname)
 //express.static() takes a file path
 app.use(express.static(path.join(__parentDirname, 'public' )))
 
-//gets all words filtered by grid size
+//gets words filtered by grid size
 app.get('/api/words', (request, response) => {
 
     //parseInt because req.query returns a string
@@ -29,12 +28,12 @@ app.get('/api/words', (request, response) => {
                 ORDER BY RANDOM()
                 LIMIT ?`
 
-    db.all(sql, count, (err, rows) => {
-        if (err) {
-            console.error('Database Error', err.message)
+    db.all(sql, count, (error, rows) => {
+        if (error) {
+            console.error('Database Error', error.message)
             return response.sendStatus(500);}
 
-        //turns words into an array only containing the words and sends as json
+        //removes id numbers
         const words = rows.map(row => row.word);
         response.json(words)
     })
