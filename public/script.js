@@ -177,7 +177,7 @@ letterGrid.addEventListener('mouseup', () => {
         selectedLetters.forEach(cell => {
             cell.classList.add('found');
         });
-        scoreCounter += 1;
+        
     
     } else if (!placedWords.includes(joinWord) || !placedWords.includes(reversed)) {
         selectedLetters.forEach(cell => {
@@ -196,9 +196,12 @@ letterGrid.addEventListener('mouseup', () => {
 resetButton.addEventListener('click', () => {
     const letters = document.querySelectorAll('.letters').forEach(letter => {
         letter.classList.remove('selected', 'found');
-
     });
     selectedLetters = [];
+
+    const foundWords = document.querySelectorAll('p').forEach(word => {
+        word.classList.remove('found-word');
+    })
 });
 
 createGrid(10,11);
