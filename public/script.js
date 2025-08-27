@@ -4,13 +4,15 @@ const wordBox = document.getElementById('word-box');
 const letterGrid = document.getElementById('search-grid');
 const resetButton = document.getElementById('reset');
 //const newPuzzle = document.getElementById('new');
-const scoreCounter = 0;
+let score = 0;
+const scoreText = document.getElementById('point-total')
 
 let mousedown = false;
 let selectedLetters = [];
 let startRow = null;
 let startCol = null;
 let placedWords = [];
+let userFoundWords = [];
 
 function placeWord(rows, cols, word, grid) {
     word = word.toUpperCase();
@@ -173,17 +175,36 @@ letterGrid.addEventListener('mouseup', () => {
     const joinWord = selectedLetters.map(cell => cell.textContent).join('').toUpperCase();
     const reversed = joinWord.split('').reverse().join('');
 
-    if (placedWords.includes(joinWord) || placedWords.includes(reversed)) {
-        selectedLetters.forEach(cell => {
-            cell.classList.add('found');
-        });
-        
     
-    } else if (!placedWords.includes(joinWord) || !placedWords.includes(reversed)) {
-        selectedLetters.forEach(cell => {
-            cell.classList.remove('selected');
-        });
+
+
+if (placedWords.includes(joinWord) || placedWords.includes(reversed)) {
+  const foundWord = placedWords.includes(joinWord) ? joinWord : reversed;
+  
+  // Only score if this word hasn't been found before
+  if (!userFoundWords.includes(foundWord)) {
+    userFoundWords.push(foundWord); // Add to found words list
+    
+    
+    if (foundWord.length <= 4) {
+      score += 5;
+      scoreText.textContent = score;
+      console.log(`+5 points for "${foundWord}". Total score: ${score}`);
+    } else if (foundWord.length >= 5) {
+        score += 10;
+        scoreText.textContent = score;
+        
     }
+  }
+  
+  selectedLetters.forEach(cell => {
+    cell.classList.add('found');
+  });
+} else {
+  selectedLetters.forEach(cell => {
+    cell.classList.remove('selected');
+  });
+}
 
     foundWords.forEach(p => {
             const text = p.textContent.toUpperCase();
@@ -191,6 +212,12 @@ letterGrid.addEventListener('mouseup', () => {
                 p.classList.add('found-word');
             }
         });
+
+    if (foundWords.length === userFoundWords.length) {
+        score += 15
+        scoreText.textContent = score
+    }
+
     })
 
 resetButton.addEventListener('click', () => {
@@ -202,6 +229,10 @@ resetButton.addEventListener('click', () => {
     const foundWords = document.querySelectorAll('p').forEach(word => {
         word.classList.remove('found-word');
     })
+
+    scoreText.textContent = '0'
+    score = 0;
+    userFoundWords = []
 });
 
 createGrid(10,11);

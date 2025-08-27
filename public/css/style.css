@@ -1,11 +1,9 @@
 body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    flex-wrap: wrap;
-    gap: 1rem;
-    
+  display: grid;
+  place-items: center;
+  gap: 1rem;
+  min-height: 100vh;
+  grid-template-columns: repeat(2, 1fr);
 }
 
 h1 {
@@ -25,6 +23,14 @@ ul {
     border: 2px solid black;
     gap: 1rem;
     padding: 0.5rem;
+    grid-area: 2 / 1;
+}
+
+.score-box {
+    border: 2px solid black;
+    grid-area: 1 / 2;
+    text-align: center;
+    padding: 1rem;
 }
 
 .search-grid {
@@ -33,6 +39,7 @@ ul {
     border: 2px solid black;
     padding: 1em;
     gap: 0;
+    grid-area: 1 / 1;
 }
 
 .letters {
@@ -60,6 +67,7 @@ ul {
   align-items: center;
   gap: 1rem;
   flex-direction: column;
+  grid-area: 2 / 2;
 }
 
 .stats-link {
