@@ -13,6 +13,86 @@ let startRow = null;
 let startCol = null;
 let placedWords = [];
 let userFoundWords = [];
+let currentWords = [];
+
+async function saveGame() {
+    const gameData = {
+        wordList: currentWords,
+        gridSize: 10,
+        score: score,
+        wordsFound: userFoundWords.length,
+        totalWords: placedWords.length
+    };
+
+    try {
+        const response = await fetch('/api/games', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(gameData)
+        });
+
+        const result = await response.json();
+        
+        if (response.ok) {
+            alert(`Game saved successfully! ID: ${result.id}`);
+        } else {
+            alert(`Error saving game: ${result.error}`);
+        }
+    } catch (error) {
+        console.error('Error saving game:', error);
+        alert('Error saving game. Please try again.');
+    }
+}
+
+async function loadSavedGames() {
+    try {
+        const response = await fetch('/api/games');
+        const games = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(games.error || 'Failed to load games');
+        }
+        
+        return games;
+    } catch (error) {
+        console.error('Error loading games:', error);
+        alert('Error loading saved games. Please try again.');
+        return [];
+    }
+}
+
+async function loadGame(gameId) {
+    try {
+        const response = await fetch(`/api/games/${gameId}`);
+        const game = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(game.error || 'Failed to load game');
+        }
+        
+        // Reset current game state
+        resetGame();
+        
+        // Set the loaded game data
+        currentWords = game.word_list;
+        score = game.score;
+        userFoundWords = []; // Start fresh for user interactions
+        
+        // Create new grid with saved words
+        await createGridFromWords(currentWords);
+        
+        // Update score display
+        scoreText.textContent = score;
+        
+        alert(`Game loaded! Original score: ${game.score}, Found ${game.words_found}/${game.total_words} words`);
+        
+    } catch (error) {
+        console.error('Error loading game:', error);
+        alert('Error loading game. Please try again.');
+    }
+}
 
 function placeWord(rows, cols, word, grid) {
     word = word.toUpperCase();
@@ -106,6 +186,9 @@ async function createGrid(rows, cols) {
     words = words.filter(word => word.length <= cols - 1);
     words.length = cols - 3;
     
+    // Store current words for saving
+    currentWords = [...words];
+    
     words.forEach(word => {
         placeWord(rows, cols, word, grid);
     });
@@ -121,6 +204,36 @@ async function createGrid(rows, cols) {
 
     return grid;
 };
+
+async function createGridFromWords(words) {
+    const rows = 10;
+    const cols = 11;
+    
+    // Clear existing grid and word box
+    letterGrid.innerHTML = '';
+    wordBox.innerHTML = '';
+    placedWords = [];
+    
+    const grid = new Array(rows).fill('').map(() => new Array(cols).fill(''));
+    
+    letterGrid.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+    letterGrid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+    
+    words.forEach(word => {
+        placeWord(rows, cols, word, grid);
+    });
+
+    for (let row = 0; row < grid.length; row++) {
+        for (let col = 0; col < grid[row].length; col++) {
+            if (grid[row][col] === '') {
+                grid[row][col] = generateRandomLetter();
+            }
+            displayGrid(grid, row, col);
+        }
+    }
+
+    return grid;
+}
 
 letterGrid.addEventListener('mousedown', (event) => {
     if (!event.target.classList.contains('letters')) return;
@@ -220,7 +333,7 @@ if (placedWords.includes(joinWord) || placedWords.includes(reversed)) {
 
     })
 
-resetButton.addEventListener('click', () => {
+function resetGame() {
     const letters = document.querySelectorAll('.letters').forEach(letter => {
         letter.classList.remove('selected', 'found');
     });
@@ -228,11 +341,105 @@ resetButton.addEventListener('click', () => {
 
     const foundWords = document.querySelectorAll('p').forEach(word => {
         word.classList.remove('found-word');
-    })
+    });
 
-    scoreText.textContent = '0'
+    scoreText.textContent = '0';
     score = 0;
-    userFoundWords = []
+    userFoundWords = [];
+}
+
+// UI event listeners
+const saveGameButton = document.getElementById('save-game');
+const loadGamesButton = document.getElementById('load-games');
+const savedGamesModal = document.getElementById('saved-games-modal');
+const closeModal = document.querySelector('.close-modal');
+const savedGamesList = document.getElementById('saved-games-list');
+
+resetButton.addEventListener('click', resetGame);
+
+saveGameButton.addEventListener('click', () => {
+    if (currentWords.length === 0) {
+        alert('No game to save. Start a new game first!');
+        return;
+    }
+    saveGame();
 });
 
-createGrid(10,11);
+loadGamesButton.addEventListener('click', showSavedGamesModal);
+
+closeModal.addEventListener('click', closeSavedGamesModal);
+
+savedGamesModal.addEventListener('click', (e) => {
+    if (e.target === savedGamesModal) {
+        closeSavedGamesModal();
+    }
+});
+
+async function showSavedGamesModal() {
+    const games = await loadSavedGames();
+    displaySavedGames(games);
+    savedGamesModal.style.display = 'flex';
+}
+
+function closeSavedGamesModal() {
+    savedGamesModal.style.display = 'none';
+}
+
+function displaySavedGames(games) {
+    savedGamesList.innerHTML = '';
+    
+    if (games.length === 0) {
+        savedGamesList.innerHTML = '<p>No saved games found.</p>';
+        return;
+    }
+    
+    games.forEach(game => {
+        const gameItem = document.createElement('div');
+        gameItem.className = 'saved-game-item';
+        
+        gameItem.innerHTML = `
+            <button class="delete-game" onclick="deleteGame(${game.id})">Delete</button>
+            <h4>Game #${game.id}</h4>
+            <p><strong>Score:</strong> ${game.score}</p>
+            <p><strong>Words Found:</strong> ${game.words_found}/${game.total_words}</p>
+            <p><strong>Grid Size:</strong> ${game.grid_size}x11</p>
+            <p><strong>Saved:</strong> ${game.created_at}</p>
+            <p><strong>Words:</strong> ${game.word_list.join(', ')}</p>
+        `;
+        
+        gameItem.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('delete-game')) {
+                loadGame(game.id);
+                closeSavedGamesModal();
+            }
+        });
+        
+        savedGamesList.appendChild(gameItem);
+    });
+}
+
+async function deleteGame(gameId) {
+    if (!confirm('Are you sure you want to delete this saved game?')) {
+        return;
+    }
+    
+    try {
+        const response = await fetch(`/api/games/${gameId}`, {
+            method: 'DELETE'
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+            alert('Game deleted successfully!');
+            showSavedGamesModal(); // Refresh the list
+        } else {
+            alert(`Error deleting game: ${result.error}`);
+        }
+    } catch (error) {
+        console.error('Error deleting game:', error);
+        alert('Error deleting game. Please try again.');
+    }
+}
+
+createGrid(10, 11);
