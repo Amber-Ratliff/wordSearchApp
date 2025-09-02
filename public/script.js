@@ -96,7 +96,7 @@ async function loadGame(gameId) {
 
 function placeWord(rows, cols, word, grid) {
     word = word.toUpperCase();
-    const directionList = ['up', 'down', 'left', 'right', 'upDiagonal', 'downDiagonal'];
+    const directionList = ['up', 'down', 'left', 'right', 'upDiagonal', 'downDiagonal', 'upLeftDiagonal', 'downLeftDiagonal'];
 
     let placed = false;
 
@@ -130,6 +130,12 @@ function placeWord(rows, cols, word, grid) {
                 break;
             case 'downDiagonal':
                 deltaRow = 1; deltaCol = 1;
+                break;
+            case 'upLeftDiagonal':
+                deltaRow = -1; deltaCol = -1;
+                break;
+            case 'downLeftDiagonal':
+                deltaRow = 1; deltaCol = -1;
                 break;
         }
 
@@ -398,7 +404,7 @@ function displaySavedGames(games) {
         gameItem.className = 'saved-game-item';
         
         gameItem.innerHTML = `
-            <button class="delete-game" onclick="deleteGame(${game.id})">Delete</button>
+            <button class="delete-game">Delete</button>
             <h4>Game #${game.id}</h4>
             <p><strong>Score:</strong> ${game.score}</p>
             <p><strong>Words Found:</strong> ${game.words_found}/${game.total_words}</p>
@@ -408,7 +414,9 @@ function displaySavedGames(games) {
         `;
         
         gameItem.addEventListener('click', (e) => {
-            if (!e.target.classList.contains('delete-game')) {
+            if (e.target.classList.contains('delete-game')) {
+                deleteGame(game.id);
+            } else {
                 loadGame(game.id);
                 closeSavedGamesModal();
             }
