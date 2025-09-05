@@ -18,6 +18,14 @@ const __parentDirname = path.dirname(__dirname)
 //express.static() takes a file path
 app.use(express.static(path.join(__parentDirname, 'public' )))
 
+app.get('/api/test', (request, response) => {
+  console.log('Test route called');
+  response.json({ 
+    message: 'API is working',
+    dbPath: process.env.DB_PATH || './backend/wordList.db'
+  });
+});
+
 //gets words filtered by grid size
 app.get('/api/words', (request, response) => {
 
