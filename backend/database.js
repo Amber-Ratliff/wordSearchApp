@@ -1,7 +1,9 @@
 //seperate db file for practice, possible scalability
 import sqlite3 from 'sqlite3';
 
-const db = new sqlite3.Database('./backend/wordList.db', 
+const dbPath = process.env.DB_PATH || './backend/wordList.db';
+
+const db = new sqlite3.Database(dbPath, 
     sqlite3.OPEN_READWRITE, (error) => {
       if (error) {
         console.error('Issue opening database:', error.message);
