@@ -72,18 +72,15 @@ async function loadGame(gameId) {
             throw new Error(game.error || 'Failed to load game');
         }
         
-        // Reset current game state
         resetGame();
         
         // Set the loaded game data
         currentWords = game.word_list;
         score = game.score;
-        userFoundWords = []; // Start fresh for user interactions
+        userFoundWords = [];
         
-        // Create new grid with saved words
         await createGridFromWords(currentWords);
         
-        // Update score display
         scoreText.textContent = score;
         
         alert(`Game loaded! Original score: ${game.score}, Found ${game.words_found}/${game.total_words} words`);
@@ -215,7 +212,6 @@ async function createGridFromWords(words) {
     const rows = 10;
     const cols = 11;
     
-    // Clear existing grid and word box
     letterGrid.innerHTML = '';
     wordBox.innerHTML = '';
     placedWords = [];
@@ -300,9 +296,8 @@ letterGrid.addEventListener('mouseup', () => {
 if (placedWords.includes(joinWord) || placedWords.includes(reversed)) {
   const foundWord = placedWords.includes(joinWord) ? joinWord : reversed;
   
-  // Only score if this word hasn't been found before
   if (!userFoundWords.includes(foundWord)) {
-    userFoundWords.push(foundWord); // Add to found words list
+    userFoundWords.push(foundWord);
     
     
     if (foundWord.length <= 4) {
@@ -354,7 +349,6 @@ function resetGame() {
     userFoundWords = [];
 }
 
-// UI event listeners
 const saveGameButton = document.getElementById('save-game');
 const loadGamesButton = document.getElementById('load-games');
 const savedGamesModal = document.getElementById('saved-games-modal');
@@ -440,7 +434,7 @@ async function deleteGame(gameId) {
         
         if (response.ok) {
             alert('Game deleted successfully!');
-            showSavedGamesModal(); // Refresh the list
+            showSavedGamesModal();
         } else {
             alert(`Error deleting game: ${result.error}`);
         }
