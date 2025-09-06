@@ -93,7 +93,11 @@ async function loadGame(gameId) {
 
 function placeWord(rows, cols, word, grid) {
     word = word.toUpperCase();
-    const directionList = ['up', 'down', 'left', 'right', 'upDiagonal', 'downDiagonal', 'upLeftDiagonal', 'downLeftDiagonal'];
+    const directionList = [
+        'up', 'down', 'left', 'right', 
+        'upDiagonal', 'downDiagonal', 'upLeftDiagonal', 'downLeftDiagonal',
+        'upDiagonal', 'downDiagonal', 'upLeftDiagonal', 'downLeftDiagonal'  // Add more diagonal chances
+    ];
 
     let placed = false;
 
