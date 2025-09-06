@@ -1,10 +1,10 @@
 //seperate db file for practice, possible scalability
 import sqlite3 from 'sqlite3';
 
-const dbPath = process.env.DB_PATH;
+const dbPath = process.env.DB_PATH || '/data/database.db';
 
 const db = new sqlite3.Database(dbPath, 
-    sqlite3.OPEN_READWRITE, (error) => {
+    sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (error) => {
       if (error) {
         console.error('Issue opening database:', error.message);
         } else {
