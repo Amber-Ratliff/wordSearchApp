@@ -174,7 +174,7 @@ async function createGrid(rows, cols) {
     let words = [];
 
     try {
-        const response = await fetch(`http://localhost:3000/api/words?count=${count}`);
+        const response = await fetch(`/api/words?count=${count}`);
 
         if (!response.ok) {
             throw new Error(`HTTP error; status: ${response.status}`);
