@@ -1,12 +1,14 @@
 import express from 'express';
+import fs from 'fs';
 //import 'dotenv/config';
-import db from './database.js';
+import db from '../database.js';
 const app = express();
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 
 // Debug: Check if file exists before trying to open
+const dbPath = process.env.DB_PATH || '../wordList.db';
 console.log('Attempting to open database at:', dbPath);
 console.log('File exists:', fs.existsSync(dbPath));
 
