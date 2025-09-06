@@ -1,6 +1,5 @@
 //seperate db file for practice, possible scalability
 import sqlite3 from 'sqlite3';
-import db from ''
 
 const dbPath = process.env.DB_PATH || './wordList.db';
 
@@ -13,6 +12,7 @@ const db = new sqlite3.Database(dbPath,
           initializeTables();
         }
 });
+
 function initializeTables() {
   db.run(`CREATE TABLE IF NOT EXISTS saved_games (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
