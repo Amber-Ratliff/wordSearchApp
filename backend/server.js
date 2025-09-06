@@ -20,9 +20,6 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 
-// Log database path for debugging
-console.log('Using database path:', process.env.DB_PATH || '../wordList.db');
-
 //recreates __filename and __dirname
 import path from 'path';
 import { fileURLToPath } from 'url';
