@@ -5,6 +5,7 @@ primary_region = 'ord'
 
 [env]
   PORT = '3000'
+  DB_PATH = '/data/wordList.db'
 
 [http_service]
   internal_port = 3000

@@ -7,18 +7,8 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 
-// Debug: Check if file exists before trying to open
-const dbPath = process.env.DB_PATH || '../wordList.db';
-console.log('Attempting to open database at:', dbPath);
-console.log('File exists:', fs.existsSync(dbPath));
-
-// Debug: List what's actually in the directories
-console.log('Contents of current directory:', fs.readdirSync('.'));
-if (fs.existsSync('./backend')) {
-  console.log('Contents of backend directory:', fs.readdirSync('./backend'));
-} else {
-  console.log('Backend directory does not exist');
-}
+// Log database path for debugging
+console.log('Using database path:', process.env.DB_PATH || '../wordList.db');
 
 //recreates __filename and __dirname
 import path from 'path';
@@ -36,7 +26,7 @@ app.get('/api/test', (request, response) => {
   console.log('Test route called');
   response.json({ 
     message: 'API is working',
-    dbPath: process.env.DB_PATH || './backend/wordList.db'
+    dbPath: process.env.DB_PATH || '../wordList.db'
   });
 });
 
