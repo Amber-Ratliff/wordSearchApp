@@ -1,6 +1,5 @@
 import express from 'express';
-import fs from 'fs';
-//import 'dotenv/config';
+import 'dotenv/config';
 import db from './database.js';
 const app = express();
 
@@ -31,16 +30,6 @@ const __parentDirname = path.dirname(__dirname)
 
 //express.static() takes a file path
 app.use(express.static(path.join(__parentDirname, 'public' )))
-
-app.get('/api/env-test', (request, response) => {
-  response.json({
-    message: 'API is working',
-    dbPath: process.env.DB_PATH || '../wordList.db',
-    dbPathRaw: process.env.DB_PATH,  // See the actual env var
-    nodeEnv: process.env.NODE_ENV,
-    allEnvVars: Object.keys(process.env).filter(key => key.includes('DB'))  // See all DB-related vars
-  });
-});
 
 //gets words filtered by grid size
 app.get('/api/words', (request, response) => {
