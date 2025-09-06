@@ -1,7 +1,7 @@
 import express from 'express';
 import fs from 'fs';
 //import 'dotenv/config';
-import db from '../database.js';
+import db from './database.js';
 const app = express();
 
 // Add CORS middleware
