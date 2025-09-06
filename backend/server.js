@@ -6,6 +6,18 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 
+// Debug: Check if file exists before trying to open
+console.log('Attempting to open database at:', dbPath);
+console.log('File exists:', fs.existsSync(dbPath));
+
+// Debug: List what's actually in the directories
+console.log('Contents of current directory:', fs.readdirSync('.'));
+if (fs.existsSync('./backend')) {
+  console.log('Contents of backend directory:', fs.readdirSync('./backend'));
+} else {
+  console.log('Backend directory does not exist');
+}
+
 //recreates __filename and __dirname
 import path from 'path';
 import { fileURLToPath } from 'url';
